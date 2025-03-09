@@ -1,9 +1,14 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { BlockFetcher } from './interfaces/block-fetcher.interface';
 
 @Injectable()
 export class EthereumService {
   constructor(private readonly httpService: HttpService) {}
+
+  private createBlockFetcher(): BlockFetcher {
+    return new BlockFetcher(this.httpService);
+  }
 
   async getLastBlock() {
     try {
