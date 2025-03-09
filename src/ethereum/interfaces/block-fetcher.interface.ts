@@ -3,15 +3,18 @@ import { Transform, TransformCallback } from 'stream';
 
 export class BlockFetcher extends Transform {
   private retryCount = 3;
-  private concurrentRequests = 3;
   private activeRequests = 0;
   private lastRequestTime = 0;
   private currentRateLimit = 200;
   private requestTimes: number[] = [];
   private queue: Array<{ blockNum: number; callback: TransformCallback }> = [];
 
-  constructor(private readonly httpService: HttpService) {
+  constructor(
+    private readonly httpService: HttpService,
+    private concurrentRequests: number,
+  ) {
     super({ objectMode: true });
+    this.concurrentRequests = concurrentRequests;
   }
 
   private async enforceRateLimit() {

@@ -8,8 +8,8 @@ import { BlockFetcher } from './interfaces/block-fetcher.interface';
 export class EthereumService {
   constructor(private readonly httpService: HttpService) {}
 
-  private createBlockFetcher(): BlockFetcher {
-    return new BlockFetcher(this.httpService);
+  private createBlockFetcher(concurrentRequests: number): BlockFetcher {
+    return new BlockFetcher(this.httpService, concurrentRequests);
   }
 
   private createBalanceProcessor(): BalanceProcessor {
@@ -35,12 +35,15 @@ export class EthereumService {
     }
   }
 
-  async findMaxBalanceChange() {
+  async findMaxBalanceChange(blocksCount: number, concurrentRequests: number) {
     try {
       const lastBlock = await this.getLastBlock();
-      const blocks = Array.from({ length: 100 }, (_, i) => lastBlock - i);
+      const blocks = Array.from(
+        { length: blocksCount },
+        (_, i) => lastBlock - i,
+      );
 
-      const fetcher = this.createBlockFetcher();
+      const fetcher = this.createBlockFetcher(concurrentRequests);
       const processor = this.createBalanceProcessor();
 
       return new Promise((res, rej) => {
