@@ -66,8 +66,10 @@ export class BalanceProcessor extends Transform {
 
       this.push({
         address: maxAddress,
-        changeInWei: maxChange.toString(),
-        changeInEth: this.weiToEth(maxChange),
+        change: {
+          Wei: maxChange.toString(),
+          Eth: this.weiToEth(maxChange),
+        },
         stats: this.stats,
       });
       callback();
