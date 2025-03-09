@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { BalanceProcessor } from './interfaces/balance-processor.interface';
 import { BlockFetcher } from './interfaces/block-fetcher.interface';
 
 @Injectable()
@@ -8,6 +9,10 @@ export class EthereumService {
 
   private createBlockFetcher(): BlockFetcher {
     return new BlockFetcher(this.httpService);
+  }
+
+  private createBalanceProcessor(): BalanceProcessor {
+    return new BalanceProcessor();
   }
 
   async getLastBlock() {
