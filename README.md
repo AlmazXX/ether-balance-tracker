@@ -32,8 +32,10 @@ GET /api/ethereum/max-balance-change?blocks=20&concurrentRequests=10
 ```json
 {
   "address": "0x123...",
-  "changeInWei": "1000000000000000000",
-  "changeInEth": "1.0",
+  "change": {
+    "Wei": "1000000000000000000",
+    "Eth": "1.0"
+  },
   "stats": {
     "blocksProcessed": 20,
     "transactionsProcessed": 1500
@@ -43,26 +45,43 @@ GET /api/ethereum/max-balance-change?blocks=20&concurrentRequests=10
 
 ## Setup
 
-1. Make sure you have an Etherscan API key set in the environment variables:
+1. Clone the repository and install dependencies:
 
-   ```
-   ETHERSCAN_API_KEY=your_api_key_here
-   ```
+```
+git clone https://github.com/AlmazXX/ether-balance-tracker.git
+cd ether-balance-tracker
+npm install
 
-   You can obtain an Etherscan API key following the instruction: https://docs.etherscan.io/getting-started/viewing-api-usage-statistics
+```
 
-2. Start the application using:
-   ```
-   npm start
-   ```
+2. Make sure you have an Etherscan API key set in the environment variables file:
+
+```
+
+ETHERSCAN_API_KEY=your_api_key_here
+
+```
+
+You can obtain an Etherscan API key following the instruction: https://docs.etherscan.io/getting-started/viewing-api-usage-statistics
+
+3. Start the application using:
+
+```
+
+npm start
+
+```
 
 ## Development
 
 - The application runs on port 4000
 - For development purposes, use:
-  ```
-  npm run start:dev
-  ```
+
+```
+
+npm run start:dev
+
+```
 
 ## Technical Details
 
