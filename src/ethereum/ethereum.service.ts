@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { pipeline } from 'stream';
 import { BalanceProcessor } from './interfaces/balance-processor.interface';
 import { BlockFetcher } from './interfaces/block-fetcher.interface';
 
@@ -39,7 +40,18 @@ export class EthereumService {
       const lastBlock = await this.getLastBlock();
       const blocks = Array.from({ length: 100 }, (_, i) => lastBlock - i);
 
-      return blocks;
+      const fetcher = this.createBlockFetcher();
+      const processor = this.createBalanceProcessor();
+
+      return new Promise((res, rej) => {
+        pipeline(blocks, fetcher, processor, (error) => {
+          if (error) rej(error);
+        });
+
+        processor.on('data', (data) => {
+          res(data);
+        });
+      });
     } catch (error) {
       throw error;
     }
