@@ -8,9 +8,16 @@ type Transaction = {
 
 export class BalanceProcessor extends Transform {
   private totalBalances: Map<string, bigint>;
+  private stats = { blocksProcessed: 0, transactionsProcessed: 0 };
   constructor() {
     super({ objectMode: true });
     this.totalBalances = new Map();
+  }
+
+  private weiToEth(wei: string | bigint): string {
+    const weiValue = typeof wei === 'string' ? BigInt(wei) : wei;
+    const ethValue = Number(weiValue) / 1000000000000000000;
+    return ethValue.toFixed(18);
   }
 
   private processTransaction(tx: Transaction) {
@@ -34,6 +41,9 @@ export class BalanceProcessor extends Transform {
       for (const tx of transactions) {
         this.processTransaction(tx);
       }
+
+      this.stats.blocksProcessed++;
+      this.stats.transactionsProcessed += transactions.length;
       callback();
     } catch (error) {
       callback(error instanceof Error ? error : new Error(String(error)));
@@ -56,7 +66,9 @@ export class BalanceProcessor extends Transform {
 
       this.push({
         address: maxAddress,
-        change: maxChange.toString(),
+        changeInWei: maxChange.toString(),
+        changeInEth: this.weiToEth(maxChange),
+        stats: this.stats,
       });
       callback();
     } catch (error) {
