@@ -1,10 +1,12 @@
 # Ethereum Balance Analysis API
 
-This application allows you to analyze Ethereum blockchain data to find addresses with the most significant balance changes over recent 100 blocks.
+This application allows you to analyze Ethereum blockchain data to find addresses with the most significant balance changes over a specified number of recent blocks.
 
 ## Features
 
 - Analyze recent Ethereum blocks to find addresses with the largest balance changes
+- Configurable number of blocks to analyze
+- Adjustable concurrent request count for performance optimization
 
 ## API Endpoints
 
@@ -14,12 +16,28 @@ This application allows you to analyze Ethereum blockchain data to find addresse
 GET /api/ethereum/max-balance-change
 ```
 
+**Query Parameters:**
+
+- `blocks` (optional): Number of recent blocks to analyze (default: 10, max: 100)
+- `concurrentRequests` (optional): Number of concurrent requests to the Etherscan API (default: 3, min: 5)
+
+**Example:**
+
+```
+GET /api/ethereum/max-balance-change?blocks=20&concurrentRequests=10
+```
+
 **Response:**
 
 ```json
 {
   "address": "0x123...",
-  "change": "1000000000000000000"
+  "changeInWei": "1000000000000000000",
+  "changeInEth": "1.0",
+  "stats": {
+    "blocksProcessed": 20,
+    "transactionsProcessed": 1500
+  }
 }
 ```
 
@@ -50,3 +68,4 @@ GET /api/ethereum/max-balance-change
 
 - Built with NestJS framework
 - Uses a stream-based approach to process blockchain data efficiently
+- Implements adaptive rate limiting to avoid Etherscan API rate limits
