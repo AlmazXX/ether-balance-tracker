@@ -67,7 +67,7 @@ export class BlockFetcher extends Transform {
         await this.enforceRateLimit();
         const hexBlockNum = `0x${blockNum.toString(16)}`;
 
-        const { data } = await this.httpService.axiosRef.get('', {
+        const { data } = await this.httpService.axiosRef.get('/', {
           params: {
             module: 'proxy',
             action: 'eth_getBlockByNumber',

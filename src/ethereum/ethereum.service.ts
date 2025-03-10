@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { pipeline } from 'stream';
-import { BalanceProcessor } from './interfaces/balance-processor.interface';
-import { BlockFetcher } from './interfaces/block-fetcher.interface';
+import { BalanceProcessor } from '../services/balance-processor.service';
+import { BlockFetcher } from '../services/block-fetcher.service';
 
 @Injectable()
 export class EthereumService {
@@ -18,7 +18,7 @@ export class EthereumService {
 
   async getLastBlock() {
     try {
-      const { data } = await this.httpService.axiosRef.get('', {
+      const { data } = await this.httpService.axiosRef.get('/', {
         params: {
           module: 'proxy',
           action: 'eth_blockNumber',

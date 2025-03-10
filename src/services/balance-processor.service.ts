@@ -6,6 +6,8 @@ type Transaction = {
   value: string;
 };
 
+const WEI_TO_ETH = Math.pow(10, 18);
+
 export class BalanceProcessor extends Transform {
   private totalBalances: Map<string, bigint>;
   private stats = { blocksProcessed: 0, transactionsProcessed: 0 };
@@ -16,7 +18,7 @@ export class BalanceProcessor extends Transform {
 
   private weiToEth(wei: string | bigint): string {
     const weiValue = typeof wei === 'string' ? BigInt(wei) : wei;
-    const ethValue = Number(weiValue) / 1000000000000000000;
+    const ethValue = Number(weiValue) / WEI_TO_ETH;
     return ethValue.toFixed(18);
   }
 

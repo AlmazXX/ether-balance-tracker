@@ -20,9 +20,9 @@ export class EthereumController {
     )
     query: BalanceChangeQueryDto,
   ) {
-    const blocksToAnalyze = query.blocks || DEFAULT_BLOCKS_TO_ANALYZE;
+    const blocksToAnalyze = query.blocks ?? DEFAULT_BLOCKS_TO_ANALYZE;
     const requestsCount =
-      query.concurrentRequests || DEFAULT_CONCURRENT_REQUESTS;
+      query.concurrentRequests ?? DEFAULT_CONCURRENT_REQUESTS;
 
     return this.ethereumService.findMaxBalanceChange(
       blocksToAnalyze,
